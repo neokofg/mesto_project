@@ -1,6 +1,9 @@
 <script>
   import "../app.pcss";
-  import {redirect} from "@sveltejs/kit";
-  redirect(307,'/register')
+  import {goto} from "$app/navigation";
+  import {onMount} from "svelte";
+  onMount(() => {
+      goto('/register')
+  });
 </script>
 <slot />
