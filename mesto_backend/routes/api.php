@@ -22,7 +22,7 @@ Route::prefix("auth")->group(function () {
     Route::post("/register/approve",[AuthController::class, "register_approve"]);
     Route::post("/login", [AuthController::class, "login"]);
 });
-
+Route::get("status", function() {return response("", 200);});
 Route::prefix("user")->middleware('auth:sanctum')->group(function () {
     Route::get("/", [UserController::class, 'get']);
 });
