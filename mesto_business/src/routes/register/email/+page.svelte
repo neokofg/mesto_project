@@ -20,8 +20,8 @@
     }
     $: isFormFilled = pins.every(pin => pin.trim() !== '');
     $: buttonClass = isFormFilled
-        ? 'py-[16px] px-[80px] transition-all bg-blue-500 text-white rounded-[12px] mt-[10%]'
-        : 'py-[16px] px-[80px] transition-all bg-[#F1F5F9] text-[#9DA5B0] rounded-[12px] mt-[10%]';
+        ? 'py-[16px] w-full transition-all bg-blue-500 text-white rounded-[12px] mt-[10%]'
+        : 'py-[16px] w-full transition-all bg-[#F1F5F9] text-[#9DA5B0] rounded-[12px] mt-[10%]';
     $: buttonText = isFormFilled ? 'Продолжить' : 'Зарегистрироваться';
 
     function triggerToast() {
@@ -58,10 +58,10 @@
     }
 </script>
 <Toast message={toastMessage} show={showToast}/>
-<div class="grid grid-cols-2 grid-rows-1" style="height: 100vh">
-    <div class="relative bg-white">
-        <div class="absolute top-1/3 left-1/3">
-            <div class="flex flex-col text-center w-2/3">
+<div class="grid grid-cols-1 lg:grid-cols-2 grid-rows-1" style="height: 100vh">
+    <div class="flex items-center bg-white">
+        <div class="mx-auto w-[70%] md:w-[50%] lg:w-[30%]">
+            <div class="flex flex-col text-center">
                 <img src="https://cdn.360mesto.ru/business/mail.png" class="mx-auto" width="40" height="40" alt="">
                 <h1 class="text-[24px] font-[600] mt-[10%]">Подтвердите E-mail</h1>
                 <p class="text-[18px] font-[400] text-[#9DA5B0] mt-[10%]">Мы направили вам на почту проверочный код</p>

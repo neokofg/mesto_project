@@ -57,9 +57,9 @@
     })
 </script>
 <Toast message={toastMessage} show={showToast}/>
-<div class="grid grid-cols-2 grid-rows-1" style="height: 100vh">
-    <div class="relative bg-white">
-        <div class="absolute top-40 left-1/4">
+<div class="grid grid-cols-1 lg:grid-cols-2 grid-rows-1" style="height: 100vh">
+    <div class="flex items-center bg-white">
+        <div class="mx-auto max-w-[619px]">
             <div class="text-center">
                 <img class="mx-auto" src="https://cdn.360mesto.ru/business/logo.png" width="121" height="22" alt="mesto">
                 <h1 class="text-[32px] font-[600]">Регистрация в личном кабинете</h1>
