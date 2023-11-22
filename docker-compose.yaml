@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  business_server:
+    build:
+      context: ./mesto_backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./mesto_backend/php/php.ini:/usr/local/etc/php/php.ini
+      - .:/workspace/business_server
+    restart: on-failure:5
+  nginx:
+    depends_on:
+      -  business_server
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - .:/workspace
+    restart: on-failure:5
+  business:
+    build:
+      context: ./mesto_business
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspace/business
+    restart: on-failure:5
+  pg:
+    container_name: pg
+    image: postgres:15-alpine
+    volumes:
+      - .:/workspace/db
+    environment:
+      - POSTGRES_DB=main
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    restart: on-failure
+  pgadmin:
+    depends_on:
+      - pg
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    volumes:
+      - .:/workspace/pgdata
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    env_file:
+      - .env
