@@ -16,12 +16,12 @@
                     </div>
                     <h2 class="text-[20px] font-[500]">ООО “Сайберия”</h2>
                 </div>
-                <img width="56" style="aspect-ratio: 1; height: 56px;" height="56" class="mt-auto" src="../arrow.png" alt="->">
+                <img width="56" style="aspect-ratio: 1; height: 56px;" height="56" class="mt-auto" src="https://cdn.360mesto.ru/business/arrow.png" alt="->">
             </div>
         </div>
     </div>
     <div class="flex flex-col bg-white rounded-[20px] p-[20px] h-[20vh]">
         <h2 class="text-[24px] font-[600]">Генерация ключ-кода</h2>
-        <button on:click={createResidentKey} class="w-full mt-auto bg-blue-500 rounded-[12px] text-[18px] text-[400] text-white py-[16px] mt-auto">Сгенерировать ключ-ссылку</button>
+        <button on:click={createResidentKey} class="hover:opacity-[0.8] hover:outline-none transition-all w-full mt-auto bg-blue-500 rounded-[12px] text-[18px] text-[400] text-white py-[16px] mt-auto">Сгенерировать ключ-ссылку</button>
     </div>
 </div>

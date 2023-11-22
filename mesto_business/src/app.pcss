@@ -29,3 +29,14 @@
 body {
     background-color: #F1F5F9;
 }
+
+.slide-down {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    transform: translateY(-100%); /* начальное положение, элемент скрыт за верхней границей экрана */
+    opacity: 0;
+}
+
+.slide-down.show {
+    transform: translateY(0); /* конечное положение, элемент на своем месте */
+    opacity: 1;
+}
