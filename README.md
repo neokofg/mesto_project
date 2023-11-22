@@ -43,5 +43,4 @@
 - Лендинг: https://360mesto.ru/
 - CDN: https://cdn.360mesto.ru/
 - PgAdmin: https://pgadmin.360mesto.ru/
-- Статус наших серверов: https://status.360mesto.ru/
-- API для редактора панорамы: https://api.panorama.360mesto.ru/
+- Статус наших серверов: https://stats.uptimerobot.com/wzXDXt0PYG
