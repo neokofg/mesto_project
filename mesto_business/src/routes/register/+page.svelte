@@ -6,6 +6,7 @@
     let password = '';
     let confirmPassword = '';
     let passwordsMatch = false;
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     $: passwordsMatch = password === confirmPassword;
     $: isFormFilled = organization && email && password && confirmPassword;
@@ -16,7 +17,23 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
-        goto('/register/email')
+        let data = {
+            email: email,
+            password: password,
+            organization_name: organization
+        }
+        const response = await fetch(apiUrl + "/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        if (!response.ok) {
+            alert(`Ошибка: ${response}`);
+        } else {
+            goto('/register/email')
+        }
     }
 </script>
 <div class="grid grid-cols-2 grid-rows-1" style="height: 100vh">

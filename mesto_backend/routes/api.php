@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResidentsController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,10 @@ Route::prefix("auth")->group(function () {
     Route::post("/register", [AuthController::class, "register"]);
     Route::post("/register/approve",[AuthController::class, "register_approve"]);
     Route::post("/login", [AuthController::class, "login"]);
+});
+
+Route::prefix("user")->middleware('auth:sanctum')->group(function () {
+    Route::get("/", [UserController::class, 'get']);
 });
 
 Route::prefix("residents")->middleware('auth:sanctum')->group(function () {

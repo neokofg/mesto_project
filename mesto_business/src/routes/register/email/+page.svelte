@@ -3,7 +3,7 @@
     import {redirect} from "@sveltejs/kit";
 
     let pins = ['', '', '', ''];
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     function focusNext(index, event) {
         if (event.target.value.length > 0 && index < pins.length - 1) {
             document.getElementById(`pin-${index + 1}`).focus();
@@ -23,7 +23,28 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
-        goto('../app')
+        let data = {
+            code: parseInt(pins.join(''))
+        }
+        const response = await fetch(apiUrl + "/auth/register/approve", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        if (!response.ok) {
+            alert(`Неверный код!`);
+        } else {
+            try {
+                const responseData = await response.json(); // Получаем JSON из ответа
+                let token = responseData.token; // Извлекаем токен из JSON
+                localStorage.setItem("token", token); // Сохраняем токен в localStorage
+                goto('/app');
+            } catch (error) {
+                console.error('Ошибка при обработке JSON:', error);
+            }
+        }
     }
 </script>
 <div class="grid grid-cols-2 grid-rows-1" style="height: 100vh">
