@@ -29,6 +29,7 @@ Route::prefix("user")->middleware('auth:sanctum')->group(function () {
 
 Route::prefix("residents")->middleware('auth:sanctum')->group(function () {
    Route::get("/", [ResidentsController::class, "get"]);
+       Route::get("/invitations", [ResidentsController::class, "get_invitations"]);
    Route::post("/generate_key", [ResidentsController::class, "generate_key"]);
 });
 

@@ -27,6 +27,17 @@ class ResidentsController extends Controller
         }
     }
 
+    public function get_invitations()
+    {
+        $user = Auth::user();
+        $response = $this->residentsService->get_invitations($user);
+        if($response) {
+            return response()->json(["message" => "Приглашения получены!", "status" => true, "residents" => $response], Response::HTTP_OK);
+        } else {
+            return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function generate_key(GenerateKeyRequest $request)
     {
         $user = Auth::user();

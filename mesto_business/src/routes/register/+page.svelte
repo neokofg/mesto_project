@@ -48,13 +48,10 @@
             goto('/register/email')
         }
     }
-
-    onMount(() => function() {
-        let savedToken = localStorage.getItem("token");
-        if(savedToken != null) {
-            goto('/app')
-        }
-    })
+    const savedToken = localStorage.getItem("token");
+    if(savedToken != null) {
+        goto('/app', {replaceState: true})
+    }
 </script>
 <Toast message={toastMessage} show={showToast}/>
 <div class="grid grid-cols-1 lg:grid-cols-2 grid-rows-1" style="height: 100vh">

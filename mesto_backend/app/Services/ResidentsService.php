@@ -19,6 +19,16 @@ class ResidentsService {
             return false;
         }
     }
+
+    public function get_invitations($u): mixed
+    {
+        try {
+            return ResidentInvitation::where("organization_id","=",$u->organization->id)->get();
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
     public function generate_key($u, $r): mixed
     {
         try {
@@ -60,6 +70,8 @@ class ResidentsService {
                 $r->save();
 
                 $t = $r->createToken('')->plainTextToken;
+
+                $r_i->delete();
 
                 return [
                     "login" => $l,

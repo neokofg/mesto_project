@@ -1,9 +1,4 @@
 <script>
   import "../app.pcss";
-  import {goto} from "$app/navigation";
-  import {onMount} from "svelte";
-  onMount(() => {
-      goto('/register')
-  });
 </script>
 <slot />
