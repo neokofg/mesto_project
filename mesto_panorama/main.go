@@ -21,7 +21,7 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
-	app.Use("/", filesystem.New(filesystem.Config{
+	app.Get("/*", filesystem.New(filesystem.Config{
 		Root: rice.MustFindBox("frontend/dist").HTTPBox(),
 	}))
 	app.Use("/uploads/", filesystem.New(filesystem.Config{

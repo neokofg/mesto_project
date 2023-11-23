@@ -8,10 +8,11 @@ import (
 	"panorama/internal/storage"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+
+	iuliia "github.com/mehanizm/iuliia-go"
 )
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 20
@@ -37,6 +38,8 @@ func (pr *Progress) Print() {
 	fmt.Printf("File upload in progress: %d\n", pr.BytesRead)
 }
 
+var Counter = 0
+
 func UploadHandler(c *fiber.Ctx) error {
 	err := godotenv.Load()
 	if err != nil {
@@ -50,7 +53,7 @@ func UploadHandler(c *fiber.Ctx) error {
 		return err
 	}
 
-	name := c.FormValue("rezident")
+	name := iuliia.Wikipedia.Translate(c.FormValue("rezident"))
 	if name == "" {
 		c.Status(fiber.StatusBadRequest).SendString(name)
 		log.Fatal("rezident == nil")
@@ -62,16 +65,13 @@ func UploadHandler(c *fiber.Ctx) error {
 		c.Status(fiber.StatusBadRequest).SendString("wt")
 		return errors.New(filetype)
 	}
-	// Create the uploads folder if it doesn't
-	// already exist
 	err = os.MkdirAll("./uploads", os.ModePerm)
 	if err != nil {
 		c.Status(fiber.StatusBadRequest).SendString(err.Error())
 		return err
 	}
 
-	// Create a new file in the uploads directory
-	dry_filename := fmt.Sprintf("%s-%d", name, time.Now().UnixNano())
+	dry_filename := name
 	filename := strings.ReplaceAll(dry_filename, " ", "_")
 
 	filename_with_ext := fmt.Sprintf("%s%s", filename, filepath.Ext(file.Filename))

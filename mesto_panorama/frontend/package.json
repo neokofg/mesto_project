@@ -13,8 +13,10 @@
     "@react-three/drei": "^9.88.17",
     "@react-three/fiber": "^8.15.11",
     "@types/three": "^0.158.3",
+    "iuliia": "^0.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
     "three": "^0.158.0"
   },
   "devDependencies": {

@@ -26,15 +26,6 @@ const SinglePanorama = (props: { url: string[] | undefined }) => {
       <CabinetEnv url={url} />
       <OrbitControls enableZoom={false} makeDefault target={[0, 1, 0]} />
       <PerspectiveCamera fov={60} position={[-4, 4, 4]} makeDefault />
-      <mesh
-        visible
-        userData={{ hello: "world" }}
-        position={[-1000, -200, -800]}
-        rotation={[Math.PI / 2, 0, 0]}
-      >
-        <sphereGeometry args={[100, 160, 160]} />
-        <meshStandardMaterial color="gray" transparent />
-      </mesh>
     </Canvas>
   );
 };
