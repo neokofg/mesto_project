@@ -1,4 +1,4 @@
-FROM golang:latest as builder
+FROM golang:1.21 as builder
 WORKDIR /panorama
 COPY go.mod ./
 COPY go.sum ./
