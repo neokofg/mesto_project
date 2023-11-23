@@ -1,4 +1,4 @@
-FROM golang:1.19-buster as builder
+FROM golang:latest as builder
 WORKDIR /panorama
 COPY go.mod ./
 COPY go.sum ./
