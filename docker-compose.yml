@@ -21,7 +21,8 @@ services:
       - .:/workspace
     restart: on-failure:5
   business:
-    depends_on: business_server
+    depends_on:
+      - business_server
     build:
       context: ./mesto_business
       dockerfile: Dockerfile
@@ -29,7 +30,8 @@ services:
       - .:/workspace/business
     restart: on-failure:5
   landing:
-    depends_on: business
+    depends_on:
+      - business
     build:
       context: ./mesto_landing
       dockerfile: Dockerfile
@@ -37,7 +39,8 @@ services:
       - .:/workspace/landing
     restart: on-failure:5
   panorama:
-    depends_on: landing
+    depends_on:
+      - landing
     build:
       context: ./mesto_panorama
       dockerfile: Dockerfile
