@@ -1,7 +1,19 @@
 package main
 
-import "panorama/internal/images"
+import (
+	"log"
+	"panorama/internal/images"
+)
 
 func main() {
-	images.ResizeImage("./uploads/1700642376485299900.jpg")
+	inImage, ext, err := images.ReadImage("./output.jpg")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	canvases := images.ConverEquirectangularToCubemap(1024, inImage)
+
+	if err := images.WriteImage(canvases, ".", ext); err != nil {
+		log.Fatal(err)
+	}
 }

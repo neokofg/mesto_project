@@ -1,6 +1,5 @@
 <script>
     import {goto} from "$app/navigation";
-    import {onMount} from "svelte";
     const apiUrl = import.meta.env.VITE_API_URL;
     let combinedArray = [];
     let token = '';
@@ -11,7 +10,6 @@
     if(typeof window !== 'undefined') {
         $: token = localStorage.getItem('token');
     }
-    // Функция для получения приглашений
     function fetchInvitations() {
         return fetch(apiUrl + '/residents/invitations', {
             method: "GET",

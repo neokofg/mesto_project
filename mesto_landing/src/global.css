@@ -1,0 +1,19 @@
+body {
+    background-color: #E2E8F0;
+    background-image: url("../public/BG.png")
+}
+.select-welcome {
+    -webkit-appearance: none; /* Для Safari и Chrome */
+    -moz-appearance: none;    /* Для Firefox */
+    appearance: none;         /* Стандартный способ */
+    /* Добавьте фоновое изображение стрелки, если нужно, и установите background-color как необходимо */
+    background: transparent;  /* Установите фоновый цвет элемента select */
+    background-repeat: no-repeat;
+    background-position: right center; /* Позиция вашего изображения стрелки */
+    padding-right: 15px; /* Установите padding, чтобы текст не перекрывал вашу стрелку */
+}
+
+/* Стиль для Internet Explorer 10+ */
+.select-welcome::-ms-expand {
+    display: none;
+}
