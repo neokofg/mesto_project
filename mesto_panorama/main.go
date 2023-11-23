@@ -15,7 +15,7 @@ func main() {
 	mux.Handle("/uploads/", http.StripPrefix("/uploads/", fs))
 	mux.HandleFunc("/api/upload", images.UploadHandler)
 
-	if err := http.ListenAndServe(":3000", mux); err != nil {
+	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatal(err)
 	}
 }
