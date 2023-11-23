@@ -27,6 +27,20 @@ services:
     volumes:
       - .:/workspace/business
     restart: on-failure:5
+  landing:
+    build:
+      context: ./mesto_landing
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspace/landing
+    restart: on-failure:5
+  panorama:
+    build:
+      context: ./mesto_panorama
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspace/panorama
+    restart: on-failure:5
   pg:
     container_name: pg
     image: postgres:15-alpine

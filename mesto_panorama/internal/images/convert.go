@@ -33,9 +33,9 @@ func outImgToXYZ(i, j, face, edge int, inLen float64) *Vec3fa {
 	case 3: // right
 		res = Vec3fa{-a, 1.0, -b}
 	case 4: // top
-		res = Vec3fa{b, a, 1.0}
+		res = Vec3fa{-b, -a, 1.0}
 	case 5: // bottom
-		res = Vec3fa{-b, a, -1.0}
+		res = Vec3fa{b, -a, -1.0}
 	default:
 		log.Fatal("Wrong face")
 	}

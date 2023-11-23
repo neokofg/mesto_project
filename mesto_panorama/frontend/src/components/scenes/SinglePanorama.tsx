@@ -5,23 +5,23 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 
-const CabinetEnv = (props: { url: string | undefined }) => {
-  const url = props.url;
-
-  const format = ".png";
-  const photos = [
-    url + "px" + format,
-    url + "nx" + format,
-    url + "py" + format,
-    url + "ny" + format,
-    url + "pz" + format,
-    url + "nz" + format,
-  ];
+const CabinetEnv = (props: { url: string[] | undefined }) => {
+  const photos = props.url;
+  console.log("photos", photos);
   return <Environment files={photos} background />;
 };
 
-const SinglePanorama = (props: { url: string | undefined }) => {
-  const { url = "/uploads/panorama/" } = props;
+const SinglePanorama = (props: { url: string[] | undefined }) => {
+  const {
+    url = [
+      "/uploads/panorama/px.png",
+      "/uploads/panorama/nx.png",
+      "/uploads/panorama/py.png",
+      "/uploads/panorama/ny.png",
+      "/uploads/panorama/pz.png",
+      "/uploads/panorama/nz.png",
+    ],
+  } = props;
   return (
     <Canvas camera={{ position: [100, 1, 1] }}>
       <CabinetEnv url={url} />

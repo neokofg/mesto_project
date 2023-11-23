@@ -3,10 +3,14 @@ package images
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
+	"panorama/internal/storage"
 	"path/filepath"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 20
@@ -33,6 +37,10 @@ func (pr *Progress) Print() {
 }
 
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	if r.Method != "POST" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -41,6 +49,13 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	file, fileHeader, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	name := r.FormValue("rezident")
+	if name == "" {
+		http.Error(w, "where is rezident?", http.StatusBadRequest)
+		log.Fatal("rezident == nil")
 		return
 	}
 
@@ -74,8 +89,9 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create a new file in the uploads directory
-	filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), filepath.Ext(fileHeader.Filename))
-	destination := fmt.Sprintf("./uploads/%s", filename)
+	filename := fmt.Sprintf("%s-%d", name, time.Now().UnixNano())
+	filename_with_ext := fmt.Sprintf("%s%s", filename, filepath.Ext(fileHeader.Filename))
+	destination := fmt.Sprintf("./uploads/%s", filename_with_ext)
 	dst, err := os.Create(destination)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -84,15 +100,50 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer dst.Close()
 
-	// Copy the uploaded file to the filesystem
-	// at the specified destination
 	_, err = io.Copy(dst, file)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData := []byte(fmt.Sprintf(`{"url": "%s"}`, fmt.Sprintf("http://localhost:3000/uploads/%s", filename)))
+	destination_resize := fmt.Sprintf("./uploads/resized-%s", filename_with_ext)
+	ResizeImage(destination, destination_resize)
+
+	aws := storage.Init()
+	_ = aws
+
+	inImage, ext, err := ReadImage(destination_resize)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	canvases := ConverEquirectangularToCubemap(1024, inImage)
+
+	all, err := WriteImage(canvases, fmt.Sprintf("./uploads/%s", filename), ext)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print(all)
+	_ = all
+	var results []interface{}
+	for i := 0; i < 6; i++ {
+		switch i {
+		case 0:
+			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-px."+ext))
+		case 1:
+			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-nx."+ext))
+		case 2:
+			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-py."+ext))
+		case 3:
+			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-ny."+ext))
+		case 4:
+			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-pz."+ext))
+		case 5:
+			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-nz."+ext))
+		}
+	}
+
+	jsonData := []byte(fmt.Sprintf(`{"url": %s}`, fmt.Sprintf("[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]", results...)))
 
 	w.Write([]byte(jsonData))
 }
