@@ -29,4 +29,9 @@ class Organization extends Model
     {
         return $this->hasMany(Resident::class, "organization_id", "id");
     }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class, "organization_id", "id");
+    }
 }
