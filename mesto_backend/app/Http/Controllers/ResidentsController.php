@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ApproveKeyRequest;
 use App\Http\Requests\GenerateKeyRequest;
+use App\Http\Requests\UpdateResidentRequest;
 use App\Services\ResidentsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +55,26 @@ class ResidentsController extends Controller
         $response = $this->residentsService->approve_key($hash);
         if($response) {
             return response()->json(["message" => "Регистрация прошла успешно!", "status" => true, "credentials" => $response], Response::HTTP_OK);
+        } else {
+            return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function decline_key(Request $request, $hash)
+    {
+        $response = $this->residentsService->decline_key($hash);
+        if($response) {
+            return response()->json(["message" => "Отклонено успешно!", "status" => true], Response::HTTP_OK);
+        } else {
+            return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function update(UpdateResidentRequest $request)
+    {
+        $response = $this->residentsService->update($request->all());
+        if($response) {
+            return response()->json(["message" => "Обновлен успешно!", "status" => true], Response::HTTP_OK);
         } else {
             return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

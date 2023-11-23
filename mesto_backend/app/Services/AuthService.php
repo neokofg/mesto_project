@@ -88,11 +88,12 @@ class AuthService {
             if(Auth::attempt($u_c)) {
                 return Auth::user()->createToken('')->plainTextToken;
             } else if(Auth::guard('resident')->attempt($r_c)) {
-                return Auth::user()->createToken('')->plainTextToken;
+                return Auth::guard('resident')->user()->createToken('')->plainTextToken;
             } else {
                 return false;
             }
         } catch(Throwable $e) {
+            dd($e);
             return false;
         }
     }

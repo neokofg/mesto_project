@@ -17,8 +17,7 @@ class UserController extends Controller
 
     public function get()
     {
-        $user = Auth::user();
-        $response = $this->userService->get($user);
+        $response = $this->userService->get();
         if($response) {
             return response()->json(["message" => "Пользователь получен!", "status" => true, "user" => $response], Response::HTTP_OK);
         } else {

@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import SinglePanorama from "./components/scenes/SinglePanorama";
 
 function App() {
   const [url, setUrl] = useState(undefined);
+  useEffect(() => {
+    console.log("import.meta.env.BASE_URL", import.meta.env.BASE_URL);
+  });
   const [rezident, setRezident] = useState("OOO Rezident");
   const [imageFile, setImageFile] = React.useState<File>();
 
@@ -20,7 +23,7 @@ function App() {
     const formData = new FormData();
     formData.append("file", imageFile);
     formData.append("rezident", rezident);
-    await fetch("/api/upload", {
+    await fetch("http://localhost:3000/api/upload", {
       method: "POST",
       body: formData,
     })

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("floor");
             $table->string("email");
             $table->string("password");
+            $table->string('description')->nullable();
             $table->foreignUuid("organization_id")->constrained("organizations")->cascadeOnDelete();
         });
     }

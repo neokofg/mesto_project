@@ -31,6 +31,8 @@ Route::prefix("residents")->middleware('auth:sanctum')->group(function () {
    Route::get("/", [ResidentsController::class, "get"]);
    Route::get("/invitations", [ResidentsController::class, "get_invitations"]);
    Route::post("/generate_key", [ResidentsController::class, "generate_key"]);
+   Route::put("/", [ResidentsController::class, "update"]);
 });
 
 Route::get('/approve_key/{hash}', [ResidentsController::class, "approve_key"]);
+Route::get('/decline_key/{hash}', [ResidentsController::class, "decline_key"]);

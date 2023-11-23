@@ -1,10 +1,10 @@
 <script>
     import {goto} from "$app/navigation";
     function redirectApp() {
-        goto('/app')
+        goto('/resident')
     }
     function redirectProfile() {
-        goto('/app/profile')
+        goto('/resident/edit')
     }
 </script>
 <header class="bg-white h-[80px] mb-[40px]">

@@ -6,6 +6,6 @@
             <a href="/#frequent"><p>Часто задаваемые вопросы</p></a>
             <a href="360"><p>Особенности 360</p></a>
         </div>
-        <button class="bg-[#E5ECFF] text-[#235DFF] py-[16px] text-[18px] font-[400] px-[32px] rounded-[12px]">Оставить заявку</button>
+        <a href="booking"><button class="bg-[#E5ECFF] text-[#235DFF] py-[16px] text-[18px] font-[400] px-[32px] rounded-[12px]">Оставить заявку</button></a>
     </div>
 </header>

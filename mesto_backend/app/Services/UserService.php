@@ -2,15 +2,18 @@
 
 namespace App\Services;
 
+use App\Models\Resident;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserService {
 
-    public function get($u)
+    public function get()
     {
         try {
-            return User::whereId($u->id)->with("organization")->first();
+            return Auth::user();
         } catch (\Throwable $e) {
+
             return false;
         }
     }

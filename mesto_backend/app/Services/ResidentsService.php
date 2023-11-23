@@ -6,6 +6,7 @@ use App\Models\Organization;
 use App\Models\Resident;
 use App\Models\ResidentInvitation;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -51,6 +52,19 @@ class ResidentsService {
         }
     }
 
+    public function decline_key($h): mixed
+    {
+        try {
+            DB::transaction(function () use($h) {
+                $r_i = ResidentInvitation::where("hash", '=', $h)->firstOrFail();
+                $r_i->delete();
+            });
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
     public function approve_key($h): mixed
     {
         try {
@@ -86,6 +100,19 @@ class ResidentsService {
                 ];
             });
             return $credentials;
+        } catch (\Throwable $e) {
+            dd($e);
+            return false;
+        }
+    }
+
+    public function update($r)
+    {
+        try {
+            $r = Auth::user();
+            $r->description = $r['description'];
+            $r->save();
+            return true;
         } catch (\Throwable $e) {
             return false;
         }

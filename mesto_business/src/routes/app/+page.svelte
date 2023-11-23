@@ -1,15 +1,38 @@
 <script>
     import {goto} from "$app/navigation";
+    import {onMount} from "svelte";
+    import Toast from "../../components/toast.svelte";
     const apiUrl = import.meta.env.VITE_API_URL;
+    const url = import.meta.env.VITE_URL;
     let combinedArray = [];
     let token = '';
     let loading = true;
+    let toastMessage = '';
+    let showToast = false;
+    function triggerToast() {
+        toastMessage = 'Успешно скопировано!';
+        showToast = true;
+        setTimeout(() => showToast = false, 3000); // Автоматически скрывать тост через 3 секунды
+    }
     async function createResidentKey() {
         goto('/newResident')
     }
     if(typeof window !== 'undefined') {
         $: token = localStorage.getItem('token');
     }
+    onMount(async () => {
+        let user = await fetch(apiUrl + '/user', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+        })
+        user = await user.json()
+        if(user.user.login != null) {
+            goto('/resident')
+        }
+    });
     function fetchInvitations() {
         return fetch(apiUrl + '/residents/invitations', {
             method: "GET",
@@ -51,7 +74,14 @@
         .catch(error => {
             console.error('Ошибка при получении данных:', error);
         });
+
+    function copyHash(hash) {
+        const approveUrl = url + "/approve?key=" + hash
+        navigator.clipboard.writeText(approveUrl)
+        triggerToast()
+    }
 </script>
+<Toast color="green" message={toastMessage} show={showToast}/>
 <div class="grid gap-6 grid-cols-3 grid-rows-1 container mx-auto">
     <div class="col-span-2 h-[70vh] bg-white rounded-[20px] p-[20px]">
         <h1 class="text-[24px] font-[600]">Резиденты {combinedArray.length}</h1>
@@ -75,7 +105,7 @@
                         {/if}
                         <h2 class="text-[20px] font-[500]">{item.name}</h2>
                     </div>
-                    <img width="56" style="aspect-ratio: 1; height: 56px;" height="56" class="mt-auto cursor-pointer hover:opacity-[0.5] hover:border-[2px] border-[#000] transition-all rounded-[60px]" src="https://cdn.360mesto.ru/business/arrow.png" alt="->">
+                    <img on:click={copyHash(item.hash)} width="56" style="aspect-ratio: 1; height: 56px;" height="56" class="mt-auto cursor-pointer hover:opacity-[0.5] hover:border-[2px] border-[#000] transition-all rounded-[60px]" src="https://cdn.360mesto.ru/business/arrow.png" alt="->">
                 </div>
             </div>
         {/each}

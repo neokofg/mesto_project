@@ -1,15 +1,16 @@
 package images
 
 import (
+	"errors"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
 	"os"
 	"panorama/internal/storage"
 	"path/filepath"
+	"strings"
 	"time"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -36,74 +37,49 @@ func (pr *Progress) Print() {
 	fmt.Printf("File upload in progress: %d\n", pr.BytesRead)
 }
 
-func UploadHandler(w http.ResponseWriter, r *http.Request) {
+func UploadHandler(c *fiber.Ctx) error {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
-	}
-	if r.Method != "POST" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
+		return err
 	}
 
-	file, fileHeader, err := r.FormFile("file")
+	file, err := c.FormFile("file")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		c.Status(fiber.StatusBadRequest).SendString(err.Error())
+		return err
 	}
 
-	name := r.FormValue("rezident")
+	name := c.FormValue("rezident")
 	if name == "" {
-		http.Error(w, "where is rezident?", http.StatusBadRequest)
+		c.Status(fiber.StatusBadRequest).SendString(name)
 		log.Fatal("rezident == nil")
-		return
+		return errors.New("name === rezident")
 	}
 
-	defer file.Close()
-
-	buff := make([]byte, 512)
-	_, err = file.Read(buff)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	filetype := filepath.Ext(file.Filename)
+	if filetype != ".jpg" && filetype != ".jpeg" && filetype != ".png" {
+		c.Status(fiber.StatusBadRequest).SendString("wt")
+		return errors.New(filetype)
 	}
-
-	filetype := http.DetectContentType(buff)
-	if filetype != "image/jpeg" && filetype != "image/png" {
-		http.Error(w, "The provided file format is not allowed. Please upload a JPEG or PNG image", http.StatusBadRequest)
-		return
-	}
-
-	_, err = file.Seek(0, io.SeekStart)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	// Create the uploads folder if it doesn't
 	// already exist
 	err = os.MkdirAll("./uploads", os.ModePerm)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		c.Status(fiber.StatusBadRequest).SendString(err.Error())
+		return err
 	}
 
 	// Create a new file in the uploads directory
-	filename := fmt.Sprintf("%s-%d", name, time.Now().UnixNano())
-	filename_with_ext := fmt.Sprintf("%s%s", filename, filepath.Ext(fileHeader.Filename))
+	dry_filename := fmt.Sprintf("%s-%d", name, time.Now().UnixNano())
+	filename := strings.ReplaceAll(dry_filename, " ", "_")
+
+	filename_with_ext := fmt.Sprintf("%s%s", filename, filepath.Ext(file.Filename))
 	destination := fmt.Sprintf("./uploads/%s", filename_with_ext)
-	dst, err := os.Create(destination)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 
-	defer dst.Close()
-
-	_, err = io.Copy(dst, file)
+	err = c.SaveFile(file, destination)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return c.Status(fiber.StatusInternalServerError).SendString("Failed to save image")
 	}
 
 	destination_resize := fmt.Sprintf("./uploads/resized-%s", filename_with_ext)
@@ -125,7 +101,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Print(all)
 	_ = all
-	var results []interface{}
+	var results []URL
 	for i := 0; i < 6; i++ {
 		switch i {
 		case 0:
@@ -143,7 +119,14 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	jsonData := []byte(fmt.Sprintf(`{"url": %s}`, fmt.Sprintf("[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]", results...)))
+	c.JSON(URLResponse{
+		URL: results,
+	})
+	return nil
+}
 
-	w.Write([]byte(jsonData))
+type URL interface{}
+
+type URLResponse struct {
+	URL []URL `json:"url"`
 }
