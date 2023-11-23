@@ -25,11 +25,11 @@ Route::prefix("auth")->group(function () {
 Route::get("status", function() {return response("", 200);});
 Route::prefix("user")->middleware('auth:sanctum')->group(function () {
     Route::get("/", [UserController::class, 'get']);
+    Route::put("/", [UserController::class, 'update']);
 });
-
 Route::prefix("residents")->middleware('auth:sanctum')->group(function () {
    Route::get("/", [ResidentsController::class, "get"]);
-       Route::get("/invitations", [ResidentsController::class, "get_invitations"]);
+   Route::get("/invitations", [ResidentsController::class, "get_invitations"]);
    Route::post("/generate_key", [ResidentsController::class, "generate_key"]);
 });
 

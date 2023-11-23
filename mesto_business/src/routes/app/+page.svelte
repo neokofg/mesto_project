@@ -68,10 +68,14 @@
                             <div class="flex items-center justify-center bg-[#F1F5F9] w-[192px] h-[38px] rounded-[12px]">
                                 <p class="text-[16px] font-[500] text-[#9DA5B0]">{item.hash}</p>
                             </div>
+                        {:else}
+                            <div class="flex items-center justify-center bg-[#E6FAF0] w-[192px] h-[38px] rounded-[12px]">
+                                <p class="text-[16px] font-[500] text-[#07C967]">Приняли</p>
+                            </div>
                         {/if}
                         <h2 class="text-[20px] font-[500]">{item.name}</h2>
                     </div>
-                    <a href=""><img width="56" style="aspect-ratio: 1; height: 56px;" height="56" class="mt-auto cursor-pointer hover:opacity-[0.5] hover:border-[2px] border-[#000] transition-all rounded-[60px]" src="https://cdn.360mesto.ru/business/arrow.png" alt="->"></a>
+                    <img width="56" style="aspect-ratio: 1; height: 56px;" height="56" class="mt-auto cursor-pointer hover:opacity-[0.5] hover:border-[2px] border-[#000] transition-all rounded-[60px]" src="https://cdn.360mesto.ru/business/arrow.png" alt="->">
                 </div>
             </div>
         {/each}

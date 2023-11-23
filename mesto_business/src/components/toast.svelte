@@ -2,14 +2,20 @@
     export let message = '';
     export let show = false;
 
+    export let color = '';
+
     // Функция для закрытия тоста
     function closeToast() {
         show = false;
     }
+
+    $: toastClass = color === 'red'
+        ? 'toast colors-red'
+        : 'toast colors-green';
 </script>
 
 {#if show}
-    <div class="toast" on:click={closeToast}>
+    <div class="{toastClass}" on:click={closeToast}>
         {message}
     </div>
 {/if}
@@ -20,13 +26,20 @@
         top: 20px;
         left: 50%;
         transform: translateX(-50%) translateY(100%);
-        background-color: darkred;
-        color: white;
         padding: 10px 40px;
         border-radius: 5px;
         cursor: pointer;
         animation: slide-up 0.3s ease-out;
         z-index: 999;
+    }
+    .colors-red {
+        background-color: darkred;
+        color: white;
+    }
+
+    .colors-green {
+        background-color: darkgreen;
+        color: white;
     }
 
     @keyframes slide-up {

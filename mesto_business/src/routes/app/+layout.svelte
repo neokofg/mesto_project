@@ -1,13 +1,15 @@
 <script>
     import Header from "../../components/header.svelte";
+    import Footer from "../../components/footer.svelte";
     import {goto} from "$app/navigation";
-    import {onMount} from "svelte";
-    onMount(() => function() {
-        let savedToken = localStorage.getItem("token");
-        if(savedToken == null) {
-            goto('/register')
-        }
-    })
+    let savedToken = '';
+    if(typeof window !== 'undefined') {
+        $: savedToken = localStorage.getItem('token');
+    }
+    if(savedToken == null) {
+        goto('/register')
+    }
 </script>
 <Header />
 <slot />
+<Footer />

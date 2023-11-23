@@ -8,6 +8,7 @@ use App\Models\ResidentInvitation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ResidentsService {
 
@@ -72,6 +73,11 @@ class ResidentsService {
                 $t = $r->createToken('')->plainTextToken;
 
                 $r_i->delete();
+
+                Mail::send('emails.new_resident', ['login' => $l, 'password' => $p], function($message) use($r){
+                    $message->to($r->email);
+                    $message->subject('mesto');
+                });
 
                 return [
                     "login" => $l,

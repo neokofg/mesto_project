@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EmailApproveRequest;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
@@ -33,6 +34,16 @@ class AuthController extends Controller
             return response()->json(["message" => "Аккаунт успешно подтвержден!", "status" => true, "token" => $response], Response::HTTP_OK);
         } else {
             return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $response = $this->authService->login($request->all());
+        if($response) {
+            return response()->json(["message" => "Вход выполнен!", "status" => true, "token" => $response], Response::HTTP_OK);
+        } else {
+            return response()->json(["message" => "Неверный логин или пароль!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Organization;
 use App\Models\User;
 use App\Models\UsersVerify;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -66,10 +67,32 @@ class AuthService {
 
                 $u_v->delete();
 
+                Mail::send('emails.new_user', ['name' => $u->name], function($message) use($u){
+                    $message->to($u->email);
+                    $message->subject('mesto');
+                });
+
                 return $u->createToken($u->id . "|token")->plainTextToken;
             });
             return $token;
         } catch (Throwable $e) {
+            return false;
+        }
+    }
+
+    public function login($r)
+    {
+        try {
+            $u_c = ['name' => $r['login'], 'password' => $r['password']];
+            $r_c = ['login' => $r['login'], 'password' => $r['password']];
+            if(Auth::attempt($u_c)) {
+                return Auth::user()->createToken('')->plainTextToken;
+            } else if(Auth::guard('resident')->attempt($r_c)) {
+                return Auth::user()->createToken('')->plainTextToken;
+            } else {
+                return false;
+            }
+        } catch(Throwable $e) {
             return false;
         }
     }

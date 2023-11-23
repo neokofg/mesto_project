@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserUpdateRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,17 @@ class UserController extends Controller
         $response = $this->userService->get($user);
         if($response) {
             return response()->json(["message" => "Пользователь получен!", "status" => true, "user" => $response], Response::HTTP_OK);
+        } else {
+            return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function update(UserUpdateRequest $request)
+    {
+        $user = Auth::user();
+        $response = $this->userService->update($user, $request->all());
+        if($response) {
+            return response()->json(["message" => "Пользователь обновлен!", "status" => true, "user" => $response], Response::HTTP_OK);
         } else {
             return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
