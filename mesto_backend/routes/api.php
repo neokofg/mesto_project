@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResidentsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookingsController;
+use App\Http\Controllers\OrganizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,10 @@ Route::prefix("residents")->middleware('auth:sanctum')->group(function () {
    Route::get("/invitations", [ResidentsController::class, "get_invitations"]);
    Route::post("/generate_key", [ResidentsController::class, "generate_key"]);
    Route::put("/", [ResidentsController::class, "update"]);
+});
+
+Route::prefix("organizations")->group(function() {
+    Route::get("/", [OrganizationController::class, "index"]);
 });
 
 Route::prefix("bookings")->group(function() {

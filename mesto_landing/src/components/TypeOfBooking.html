@@ -1,0 +1,34 @@
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    function submit() {
+        data = {
+            format: 'school',
+            number: document.getElementById('number').value,
+            email: document.getElementById('email').value,
+            clients: document.getElementById('clients').value,
+            fromDate: document.getElementById('fromDate').value,
+            toDate: document.getElementById('toDate').value,
+            organization_id: id
+        }
+        let response = fetch('http://localhost:8000/api/bookings', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        });
+        console.log(response)
+    }
+</script>
+<div>
+    <input type="radio" value="school" name="format">
+    <input type="radio" value="university" name="format">
+    <input type="radio" value="individual" name="format">
+    <input type="text" placeholder="Номер телефона" id="number" name="number">
+    <input type="text" placeholder="Email" id="email" name="email">
+    <input type="number" placeholder="Кол-во участников" id="clients" name="clients">
+    <input type="date" id="fromDate" name="fromDate">
+    <input type="date" id="toDate" name="toDate">
+    <button onclick="submit()" type="submit">go</button>
+</div>

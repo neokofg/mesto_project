@@ -1,8 +1,26 @@
 ---
 import IndexLayout from "../layouts/indexLayout.astro";
 import Organizations from "../components/Organizations.svelte";
----
 
+let organizations;
+try {
+    const response = await fetch("http://localhost:8000/api/organizations/", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+    }
+    organizations = await response.json();
+    organizations = organizations.organizations;
+} catch (error) {
+    console.error('Fetch error:', error);
+    organizations = [];
+}
+console.log(organizations);
+---
 <IndexLayout>
-    <Organizations />
+    <Organizations organizations={organizations}  />
 </IndexLayout>

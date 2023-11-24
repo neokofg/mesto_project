@@ -48,8 +48,7 @@ class BookingsService {
                 $b = $b->where('status','=',$r['status']);
             }
             if (isset($r['fromDate'], $r['toDate'])) {
-                $b = $b->where('fromDate', '>=', $r['fromDate'])
-                    ->where('toDate', '<=', $r['toDate']);
+                $b = $b->whereBetween('fromDate', array($r['fromDate'],$r['toDate']));
             }
             return $b->get();
         } catch (\Throwable $e) {

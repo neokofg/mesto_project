@@ -1,15 +1,21 @@
-<script>
-    let format = '';
+---
     function next() {
         console.log("ho")
-        format.classList.add('hidden');
-    } // не работает
-</script>
+    }
+
+    let selectedType = 'school'; // Значение по умолчанию
+
+    function updateSelectedType(event) {
+        selectedType = event.target.value;
+        console.log('Выбрано: ', selectedType);
+    }
+
+---
 <div class="flex container bg-white p-[32px] w-full mx-auto rounded-[20px]">
-    <img src="https://cdn.360mesto.ru/landing/backbutton.png" alt="">
-    <h2 class="text-[32px] font-[600] text-[#020617] ml-[2%]">IT Park Yakutia</h2>
+    <a href="/booking"><img src="https://cdn.360mesto.ru/landing/backbutton.png" alt=""></a>
+    <h2 class="text-[32px] font-[600] text-[#020617] ml-[2%]"></h2>
 </div>
-<div bind:this={format} class="container w-[50%] bg-white rounded-[20px] mx-auto p-[24px] mt-[5%]">
+<div class="container w-[50%] bg-white rounded-[20px] mx-auto p-[24px] mt-[5%]">
     <h2 class="text-[24px] font-[600] text-[#020617]">Выберите ваш формат</h2>
     <p class="text-[18px] font-[400] text-[#92979F]">Где вы учитесь или работаете?</p>
     <div class="grid grid-cols-3 gap-3 h-[180px] mt-[5%]">
@@ -29,9 +35,14 @@
             <p class="text-[20px] font-[600] text-[#020617] text-center mb-auto">Индивидуальный участник</p>
         </div>
     </div>
+    <div>
+        <input type="radio" name="type" value="school" checked onchange={updateSelectedType}>
+        <input type="radio" name="type" value="university" onchange={updateSelectedType}>
+        <input type="radio" name="type" value="individual" onchange={updateSelectedType}>
+    </div>
     <div class="grid grid-cols-3 items-center mt-[5%]">
         <div></div>
         <h2 class="text-[24px] font-[600] text-center">1/5</h2>
-        <button on:click={next} class="py-[16px] px-[32px] rounded-[12px] bg-[#235DFF] max-w-[115px] ml-auto text-white text-[18px] font-[400]">Далее</button>
+        <button type="button" onclick={next} class="py-[16px] px-[32px] rounded-[12px] bg-[#235DFF] max-w-[115px] ml-auto text-white text-[18px] font-[400]">Далее</button>
     </div>
 </div>

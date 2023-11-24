@@ -73,7 +73,7 @@ class BookingsController extends Controller
 
     public function excursions(Request $request)
     {
-        $response = Excursion::where("organization_id",'=',Auth::user()->organization()->first()->id)->get();
+        $response = Excursion::where("organization_id",'=',Auth::user()->organization()->first()->id)->with(['bookings'])->get();
         if($response) {
             return response()->json(["message" => "Экскурсии получены!", "status" => true, "excursions" => $response], Response::HTTP_OK);
         } else {

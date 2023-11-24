@@ -2,6 +2,7 @@
     import Input from '../../components/input.svelte';
     import Toast from '../../components/toast.svelte';
     import {goto} from "$app/navigation";
+    import {onMount} from "svelte";
 
     let organization = '';
     let email = '';
@@ -51,9 +52,11 @@
     if(typeof window !== 'undefined') {
         $: savedToken = localStorage.getItem('token');
     }
-    if(savedToken != null) {
-        goto('/app')
-    }
+    onMount(() => {
+        if(savedToken != null) {
+            goto('/app')
+        }
+    });
     function login() {
         goto('/login')
     }
