@@ -18,7 +18,8 @@ class Resident extends \Illuminate\Foundation\Auth\User
         "flat",
         "floor",
         "email",
-        "organization_id"
+        "organization_id",
+        "description"
     ];
 
     protected $hidden = [
