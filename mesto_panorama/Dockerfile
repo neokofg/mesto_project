@@ -9,5 +9,5 @@ RUN CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o app .
 FROM scratch
 COPY --from=builder /panorama/app .
 COPY --from=builder /panorama/frontend/dist /panorama/frontend/dist
-EXPOSE 8080
+EXPOSE 3000
 ENTRYPOINT ["./app"]
