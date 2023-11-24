@@ -34,7 +34,9 @@
     }
 
     function selectBooking(bookingId) {
-        selectedBookings.push(bookingId)
+        selectedBookings.push(bookingId);
+        let button = document.getElementById(bookingId);
+        button.disabled = true;
     }
 
     async function excursion() {
@@ -55,23 +57,26 @@
     }
 </script>
 <div class="container mx-auto">
-    <label for="date">Выберите дату</label>
-    <input bind:value={date} type="date" name="date">
-<!--    <label for="time">Выберите время</label>-->
-<!--    <input bind:value={time} type="time" name="time">-->
-    <button on:click={search}>Поиск</button>
-    {#each bookings as booking}
-        <div class="flex flex-col bg-white rounded-[20px]">
-            <p>Даты</p>
-            <p>{booking.fromDate} - {booking.toDate}</p>
-            <p>{booking.clients} человек</p>
-            <p>{booking.format} формат</p>
-            <button on:click={selectBooking(booking.id)}>взять</button>
-        </div>
-    {/each}
-    <label for="time">Выберите время</label>
+    <label class="font-[600] text-[18px]" for="date">Выберите дату</label>
+    <input class="py-[16px] border-[1px] rounded-[16px] px-[16px] mt-[1%]" bind:value={date} type="date" name="date">
+    <button class="p-[16px] bg-[#235DFF] rounded-[16px] text-white" on:click={search}>Поиск</button>
+    <br>
+    <div class="grid grid-cols-3">
+        {#each bookings as booking}
+            <div class="flex p-[16px] flex-col bg-white rounded-[20px]">
+                <div class="flex items-center">
+                    <p class="font-[600] text-[24px]">Даты:</p>
+                    <p class="font-[400] text-[18px] ml-[1%]">{booking.fromDate} - {booking.toDate}</p>
+                </div>
+                <p class="font-[400] text-[18px]"><span class="font-[600]">{booking.clients}</span> человек</p>
+                <p>{booking.format} формат</p>
+                <button id={booking.id} class="disabled:opacity-[0.5] p-[16px] bg-[#235DFF] rounded-[16px] text-white" on:click={selectBooking(booking.id)}>Выбрать</button>
+            </div>
+        {/each}
+    </div>
+    <label class="font-[600] text-[18px]" for="time">Выберите время</label>
     <form on:submit={excursion}>
-    <input bind:value={time} type="time" name="time">
-    <button>Назначить экскурсию</button>
+    <input class="py-[16px] border-[1px] rounded-[16px] px-[16px] mt-[1%]" bind:value={time} type="time" name="time">
+    <button class="p-[16px] bg-[#235DFF] rounded-[16px] text-white">Назначить экскурсию</button>
     </form>
 </div>

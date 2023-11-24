@@ -21,14 +21,19 @@
         console.log(response)
     }
 </script>
-<div>
-    <input type="radio" value="school" name="format">
-    <input type="radio" value="university" name="format">
-    <input type="radio" value="individual" name="format">
-    <input type="text" placeholder="Номер телефона" id="number" name="number">
-    <input type="text" placeholder="Email" id="email" name="email">
-    <input type="number" placeholder="Кол-во участников" id="clients" name="clients">
-    <input type="date" id="fromDate" name="fromDate">
-    <input type="date" id="toDate" name="toDate">
-    <button onclick="submit()" type="submit">go</button>
+<div class="container mx-auto flex flex-col p-[20px] bg-white rounded-[20px]">
+    <div>
+        <label>Школа</label>
+        <input type="radio" value="school" name="format">
+        <label>Университеты</label>
+        <input type="radio" value="university" name="format">
+        <label>Индивидуально</label>
+        <input type="radio" value="individual" name="format">
+    </div>
+    <input class="py-[16px] border-[1px] rounded-[16px] px-[16px] mt-[1%]" type="text" placeholder="Номер телефона" id="number" name="number">
+    <input class="py-[16px] border-[1px] rounded-[16px] px-[16px] mt-[1%]" type="text" placeholder="Email" id="email" name="email">
+    <input class="py-[16px] border-[1px] rounded-[16px] px-[16px] mt-[1%]" type="number" placeholder="Кол-во участников" id="clients" name="clients">
+    <input class="py-[16px] border-[1px] rounded-[16px] px-[16px] mt-[1%]" type="date" id="fromDate" name="fromDate">
+    <input class="py-[16px] border-[1px] rounded-[16px] px-[16px] mt-[1%]" type="date" id="toDate" name="toDate">
+    <button onclick="submit()" type="submit" class="py-[16px] bg-[#235DFF] text-white rounded-[16px] mt-[1%]">Создать заявку</button>
 </div>

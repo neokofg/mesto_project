@@ -29,11 +29,10 @@
             <p class="text-[24px] font-[600]">Записи:</p>
             {#each excursion.bookings as booking}
                 <div>
-                    <p>Клиенты</p>
-                    <p>{booking.clients}</p>
-                    <p>Контакты</p>
-                    <p>{booking.email}</p>
-                    <p>{booking.number}</p>
+                    <p class="font-[600] text-[18px]">Клиенты: <span class="font-[400]">{booking.clients}</span> </p>
+                    <p class="font-[600] text-[18px]">Контакты: </p>
+                    <p>email: {booking.email}</p>
+                    <p>телефон: {booking.number}</p>
                 </div>
             {/each}
         </div>
