@@ -3,8 +3,9 @@ import IndexLayout from "../layouts/indexLayout.astro";
 import Organizations from "../components/Organizations.svelte";
 
 let organizations;
+const apiUrl = import.meta.env.PUBLIC_API_URL;
 try {
-    const response = await fetch("http://localhost:8000/api/organizations/", {
+    const response = await fetch( apiUrl+"/api/organizations/", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

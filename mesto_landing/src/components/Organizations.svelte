@@ -8,7 +8,7 @@
 
 {#each organizations as item}
     <div class="container flex bg-white rounded-[20px] mx-auto w-full p-[20px] mt-[1%]">
-        <a href="http://localhost:3000"><img src="https://cdn.360mesto.ru/landing/ITpark.png" alt=""></a>
+        <a href={import.meta.env.PUBLIC_PANORAMA_URL}><img src="https://cdn.360mesto.ru/landing/ITpark.png" alt=""></a>
         <div class="ml-[4%]">
             <h2 class="text-[44px] font-[700]">{item.name}</h2>
             <p class="flex text-[18px] font-[400] mt-[4%] text-[#414751]"><span><img src="https://cdn.360mesto.ru/landing/Location.png" alt=""></span>г. Якутск, ул. Ленина 1,</p>

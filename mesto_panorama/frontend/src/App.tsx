@@ -39,12 +39,12 @@ function fromCyrillicToLatin(company: string): string {
 
 const StartList = () => {
   const floors = [
-    { url: "http://localhost:3000/", name: "2 этаж" },
-    { url: "http://localhost:3000/", name: "3 этаж" },
-    { url: "http://localhost:3000/", name: "4 этаж" },
-    { url: "http://localhost:3000/", name: "5 этаж" },
+    { url: "https://panorama.360mesto.ru", name: "2 этаж" },
+    { url: "https://panorama.360mesto.ru", name: "3 этаж" },
+    { url: "https://panorama.360mesto.ru", name: "4 этаж" },
+    { url: "https://panorama.360mesto.ru", name: "5 этаж" },
     {
-      url: `http://localhost:3000?floor=6&coms=["ООО Пирожок", "ООО Квантум"]`,
+      url: `https://panorama.360mesto.ru?floor=6`,
       name: "6 этаж",
     },
   ];
@@ -104,9 +104,9 @@ function fromArrayToString(arr: string[]): string {
   return s;
 }
 
-const ListComponent = (props: { array: { name: string; desc: string }[] }) => {
-  const { array } = props;
-  if (array === undefined) return null;
+const ListComponent = (props: { floor: string }) => {
+  const { floor } = props;
+  if (floor === undefined) return null;
   const [coms, setComs] = useState<ComsType[]>([]);
 
   function handleClick(url: string) {
@@ -115,27 +115,38 @@ const ListComponent = (props: { array: { name: string; desc: string }[] }) => {
     }
   }
 
+  const getCompanies = async () => {
+    await fetch("https://api.360mesto.ru/api/residents/all/" + floor)
+      .then((response) => response.json())
+      .then((data) => {
+        const companies = data.residents;
+        const sscoms: ComsType[] = [];
+
+        for (let i = 0; i < companies.length; i++) {
+          const urls: string[] = [];
+          for (let j = 0; j < 6; j++) {
+            urls.push(
+              "https://panorama.360mesto.ru/uploads/" +
+                fromCyrillicToLatin(companies[i].name) +
+                "-" +
+                FaceMaps[j] +
+                ".jpeg",
+            );
+          }
+          sscoms.push({
+            url: urls,
+            name: companies[i].name,
+            desc: companies[i].description,
+          });
+        }
+        console.log("sscoms", sscoms);
+        setComs(sscoms);
+      })
+      .catch((error) => console.error(error));
+  };
+
   useEffect(() => {
-    const sscoms: ComsType[] = [];
-    for (let i = 0; i < array.length; i++) {
-      const urls: string[] = [];
-      for (let j = 0; j < 6; j++) {
-        urls.push(
-          "http://localhost:3000/uploads/" +
-            fromCyrillicToLatin(array[i].name) +
-            "-" +
-            FaceMaps[j] +
-            ".jpeg",
-        );
-      }
-      sscoms.push({
-        url: urls,
-        name: array[i].name,
-        desc: array[i].desc,
-      });
-    }
-    console.log("sscoms", sscoms);
-    setComs(sscoms);
+    getCompanies();
   }, []);
 
   return (
@@ -165,7 +176,7 @@ const ListComponent = (props: { array: { name: string; desc: string }[] }) => {
           }}
           onClick={() =>
             void handleClick(
-              "http://localhost:3000?com=" +
+              "https://panorama.360mesto.ru?com=" +
                 floor.name +
                 "&desc=" +
                 floor.desc +
@@ -206,12 +217,12 @@ function App() {
         setUrl(urls);
       } else {
         setUrl([
-          "http://localhost:3000/uploads/" + floor + "-px.jpeg",
-          "http://localhost:3000/uploads/" + floor + "-nx.jpeg",
-          "http://localhost:3000/uploads/" + floor + "-py.jpeg",
-          "http://localhost:3000/uploads/" + floor + "-ny.jpeg",
-          "http://localhost:3000/uploads/" + floor + "-pz.jpeg",
-          "http://localhost:3000/uploads/" + floor + "-nz.jpeg",
+          "https://panorama.360mesto.ru/uploads/" + floor + "-px.jpeg",
+          "https://panorama.360mesto.ru/uploads/" + floor + "-nx.jpeg",
+          "https://panorama.360mesto.ru/uploads/" + floor + "-py.jpeg",
+          "https://panorama.360mesto.ru/uploads/" + floor + "-ny.jpeg",
+          "https://panorama.360mesto.ru/uploads/" + floor + "-pz.jpeg",
+          "https://panorama.360mesto.ru/uploads/" + floor + "-nz.jpeg",
         ]);
       }
       setDesc(extractValuesFromQueryParam(window.location.href, "desc="));
@@ -262,14 +273,7 @@ function App() {
         {hide ? (
           ""
         ) : floor ? (
-          <ListComponent
-            array={[
-              {
-                name: "МПИТ",
-                desc: "МПИТ - это всероссийский конкурс для школьников и студентов",
-              },
-            ]}
-          />
+          <ListComponent floor={floor} />
         ) : company ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
             <span
