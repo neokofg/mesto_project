@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ApproveKeyRequest;
 use App\Http\Requests\GenerateKeyRequest;
 use App\Http\Requests\UpdateResidentRequest;
+use App\Models\Resident;
 use App\Services\ResidentsService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,6 +77,16 @@ class ResidentsController extends Controller
         $response = $this->residentsService->update($request->all());
         if($response) {
             return response()->json(["message" => "Обновлен успешно!", "status" => true], Response::HTTP_OK);
+        } else {
+            return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function index(Request $request, $floor): JsonResponse
+    {
+        $res = Resident::where('floor', '=', $floor)->get();
+        if($res) {
+            return response()->json(["message" => "Получено!", "status" => true, "residents" => $res], Response::HTTP_OK);
         } else {
             return response()->json(["message" => "Произошла ошибка!", "status" => false], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

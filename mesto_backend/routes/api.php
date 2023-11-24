@@ -35,7 +35,7 @@ Route::prefix("residents")->middleware('auth:sanctum')->group(function () {
    Route::post("/generate_key", [ResidentsController::class, "generate_key"]);
    Route::put("/", [ResidentsController::class, "update"]);
 });
-
+Route::get('/residents/all/{floor}', [ResidentsController::class, 'index']);
 Route::prefix("organizations")->group(function() {
     Route::get("/", [OrganizationController::class, "index"]);
 });

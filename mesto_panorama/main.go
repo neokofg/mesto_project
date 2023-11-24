@@ -25,7 +25,7 @@ func main() {
 		Root: rice.MustFindBox("frontend/dist").HTTPBox(),
 	}))
 	app.Use("/uploads/", filesystem.New(filesystem.Config{
-		Root: packr.New("Uploads", "/uploads"),
+		Root: packr.New("Uploads", "frontend/dist/uploads"),
 	}))
 
 	app.Post("/api/upload/", images.UploadHandler)

@@ -65,7 +65,7 @@ func UploadHandler(c *fiber.Ctx) error {
 		c.Status(fiber.StatusBadRequest).SendString("wt")
 		return errors.New(filetype)
 	}
-	err = os.MkdirAll("./uploads", os.ModePerm)
+	err = os.MkdirAll("./frontend/dist/uploads", os.ModePerm)
 	if err != nil {
 		c.Status(fiber.StatusBadRequest).SendString(err.Error())
 		return err
@@ -75,14 +75,14 @@ func UploadHandler(c *fiber.Ctx) error {
 	filename := strings.ReplaceAll(dry_filename, " ", "_")
 
 	filename_with_ext := fmt.Sprintf("%s%s", filename, filepath.Ext(file.Filename))
-	destination := fmt.Sprintf("./uploads/%s", filename_with_ext)
+	destination := fmt.Sprintf("./frontend/dist/uploads/%s", filename_with_ext)
 
 	err = c.SaveFile(file, destination)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Failed to save image")
 	}
 
-	destination_resize := fmt.Sprintf("./uploads/resized-%s", filename_with_ext)
+	destination_resize := fmt.Sprintf("./frontend/dist/uploads/resized-%s", filename_with_ext)
 	ResizeImage(destination, destination_resize)
 
 	aws := storage.Init()
@@ -95,7 +95,7 @@ func UploadHandler(c *fiber.Ctx) error {
 
 	canvases := ConverEquirectangularToCubemap(1024, inImage)
 
-	all, err := WriteImage(canvases, fmt.Sprintf("./uploads/%s", filename), ext)
+	all, err := WriteImage(canvases, fmt.Sprintf("./frontend/dist/uploads/%s", filename), ext)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -105,17 +105,17 @@ func UploadHandler(c *fiber.Ctx) error {
 	for i := 0; i < 6; i++ {
 		switch i {
 		case 0:
-			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-px."+ext))
+			results = append(results, fmt.Sprintf("%sfrontend/dist/uploads/%s", os.Getenv("API_URL"), filename+"-px."+ext))
 		case 1:
-			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-nx."+ext))
+			results = append(results, fmt.Sprintf("%sfrontend/dist/uploads/%s", os.Getenv("API_URL"), filename+"-nx."+ext))
 		case 2:
-			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-py."+ext))
+			results = append(results, fmt.Sprintf("%sfrontend/dist/uploads/%s", os.Getenv("API_URL"), filename+"-py."+ext))
 		case 3:
-			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-ny."+ext))
+			results = append(results, fmt.Sprintf("%sfrontend/dist/uploads/%s", os.Getenv("API_URL"), filename+"-ny."+ext))
 		case 4:
-			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-pz."+ext))
+			results = append(results, fmt.Sprintf("%sfrontend/dist/uploads/%s", os.Getenv("API_URL"), filename+"-pz."+ext))
 		case 5:
-			results = append(results, fmt.Sprintf("%suploads/%s", os.Getenv("API_URL"), filename+"-nz."+ext))
+			results = append(results, fmt.Sprintf("%sfrontend/dist/uploads/%s", os.Getenv("API_URL"), filename+"-nz."+ext))
 		}
 	}
 
